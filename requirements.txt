@@ -1,0 +1,75 @@
+# Django Core
+Django==5.0.1
+django-environ==0.11.2
+
+# Database
+psycopg2-binary==2.9.9
+
+# Multi-tenancy
+django-tenant-schemas==1.11.0
+django-tenants==3.5.0
+
+# Authentication & Authorization
+django-allauth==0.61.1
+django-guardian==2.4.0
+
+# Redis & Caching
+redis==5.0.1
+django-redis==5.4.0
+hiredis==2.3.2
+
+# Celery
+celery==5.3.6
+celery[redis]==5.3.6
+django-celery-beat==2.5.0
+django-celery-results==2.5.1
+
+# HTMX
+django-htmx==1.17.3
+
+# Forms & Widgets
+django-widget-tweaks==1.5.0
+django-crispy-forms==2.1
+crispy-tailwind==1.0.3
+
+# API (for mobile app future expansion)
+djangorestframework==3.14.0
+
+# Payment Integration
+paystackapi==2.1.0
+
+# File Handling
+Pillow==10.2.0
+django-storages==1.14.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+shortuuid==1.0.11
+
+# SMS & Email
+twilio==8.13.0
+django-anymail==10.2
+
+# Excel/CSV handling
+openpyxl==3.1.2
+pandas==2.2.0
+
+# QR Code & Barcode
+qrcode==7.4.2
+python-barcode==0.15.1
+
+# Security
+django-cors-headers==4.3.1
+django-csp==3.8
+
+# Development
+django-debug-toolbar==4.3.0
+django-extensions==3.2.3
+
+# Production
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Monitoring
+sentry-sdk==1.40.5

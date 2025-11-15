@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School Management System{% endblock %}</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '{{ primary_color }}',
+                        secondary: '{{ secondary_color }}',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2" x-data="toastManager()" @toast.window="addToast($event.detail)">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div x-show="toast.visible"
+                 x-transition:enter="transform ease-out duration-300 transition"
+                 x-transition:enter-start="translate-x-full opacity-0"
+                 x-transition:enter-end="translate-x-0 opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 :class="{
+                    'bg-green-500': toast.type === 'success',
+                    'bg-red-500': toast.type === 'error',
+                    'bg-yellow-500': toast.type === 'warning',
+                    'bg-blue-500': toast.type === 'info'
+                 }"
+                 class="px-6 py-4 rounded-lg shadow-lg text-white flex items-center gap-3 max-w-sm">
+                <span x-text="toast.message"></span>
+                <button @click="removeToast(toast.id)" class="ml-auto">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        </template>
+    </div>
+
+    {% if user.is_authenticated %}
+        {% include 'components/navbar.html' %}
+
+        <div class="flex">
+            {% include 'components/sidebar.html' %}
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6 lg:ml-64">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    {% else %}
+        {% block fullpage_content %}{% endblock %}
+    {% endif %}
+
+    <script>
+        // Toast Manager
+        function toastManager() {
+            return {
+                toasts: [],
+                nextId: 1,
+                addToast(data) {
+                    const id = this.nextId++;
+                    const toast = { id, visible: true, ...data };
+                    this.toasts.push(toast);
+
+                    setTimeout(() => {
+                        this.removeToast(id);
+                    }, data.duration || 5000);
+                },
+                removeToast(id) {
+                    const toast = this.toasts.find(t => t.id === id);
+                    if (toast) {
+                        toast.visible = false;
+                        setTimeout(() => {
+                            this.toasts = this.toasts.filter(t => t.id !== id);
+                        }, 300);
+                    }
+                }
+            }
+        }
+
+        // Helper function to show toast
+        function showToast(message, type = 'info', duration = 5000) {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: { message, type, duration }
+            }));
+        }
+
+        // Show Django messages as toasts
+        {% if messages %}
+            {% for message in messages %}
+                showToast('{{ message }}', '{{ message.tags }}');
+            {% endfor %}
+        {% endif %}
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

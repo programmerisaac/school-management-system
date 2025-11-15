@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - {{ active_school.name }}{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+    <p class="text-gray-600 mt-1">Welcome back, {{ user.get_full_name }}!</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Students -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-600">Total Students</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats.total_students|default:0 }}</p>
+            </div>
+            <div class="p-3 rounded-full" style="background-color: {{ primary_color }}20;">
+                <svg class="w-8 h-8" style="color: {{ primary_color }};" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'students:list' %}" class="text-sm font-medium hover:underline" style="color: {{ primary_color }};">View all →</a>
+        </div>
+    </div>
+
+    <!-- Total Staff -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-600">Total Staff</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats.total_staff|default:0 }}</p>
+            </div>
+            <div class="p-3 rounded-full bg-green-100">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'staff:list' %}" class="text-sm text-green-600 font-medium hover:underline">View all →</a>
+        </div>
+    </div>
+
+    <!-- Pending Fees -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-600">Pending Fees</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">₦0.00</p>
+            </div>
+            <div class="p-3 rounded-full bg-yellow-100">
+                <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'fees:dashboard' %}" class="text-sm text-yellow-600 font-medium hover:underline">View details →</a>
+        </div>
+    </div>
+
+    <!-- Attendance -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-600">Today's Attendance</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">0%</p>
+            </div>
+            <div class="p-3 rounded-full bg-purple-100">
+                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'students:mark_attendance' %}" class="text-sm text-purple-600 font-medium hover:underline">Mark attendance →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <div class="space-y-3">
+            <a href="{% url 'students:add' %}" class="flex items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+                <span class="text-gray-700">Add New Student</span>
+            </a>
+            <a href="{% url 'staff:add' %}" class="flex items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+                <span class="text-gray-700">Add New Staff</span>
+            </a>
+            <a href="{% url 'academics:add_exam' %}" class="flex items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-gray-700">Create New Exam</span>
+            </a>
+            <a href="{% url 'fees:record_payment' %}" class="flex items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span class="text-gray-700">Record Payment</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activities</h2>
+        <div class="space-y-4">
+            <div class="text-center text-gray-500 py-8">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <p>No recent activities</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Subscription Info -->
+{% if active_school.subscription %}
+<div class="bg-white rounded-lg shadow p-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900">Subscription Status</h3>
+            <p class="text-sm text-gray-600 mt-1">
+                Plan: <span class="font-medium">{{ active_school.subscription.plan.name }}</span>
+            </p>
+        </div>
+        <span class="px-4 py-2 rounded-full text-sm font-medium
+            {% if active_school.get_subscription_status == 'active' %}
+                bg-green-100 text-green-800
+            {% elif active_school.get_subscription_status == 'trial' %}
+                bg-blue-100 text-blue-800
+            {% else %}
+                bg-red-100 text-red-800
+            {% endif %}">
+            {{ active_school.get_subscription_status|title }}
+        </span>
+    </div>
+    {% if active_school.subscription.days_remaining < 30 %}
+    <div class="mt-4 p-4 bg-yellow-50 rounded-lg">
+        <p class="text-sm text-yellow-800">
+            Your subscription will expire in {{ active_school.subscription.days_remaining }} days.
+            <a href="{% url 'schools:subscription' %}" class="font-medium underline">Renew now</a>
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
